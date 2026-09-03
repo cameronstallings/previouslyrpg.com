@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Previously</title>
+<meta name="theme-color" content="#100D09">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23100D09'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='40' fill='%23E0B75C'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almendra&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="wordmark" href="/">Previously</a>
+    <nav><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="mailto:support@previouslyrpg.com">Support</a></nav>
+  </header>
+
+  <!-- Invite links look like /j/CODE. On this host an unknown path lands here,
+       so this page is both the invite landing and the not-found page. On a
+       phone with the app installed, the universal link never reaches this page. -->
+  <div id="invite" hidden>
+    <p class="label">You are invited</p>
+    <h1>A seat at the table.</h1>
+    <div class="rule"></div>
+    <p class="lede">Someone has invited you to their table on Previously, the app that remembers every session of your game.</p>
+    <div class="plate">
+      <p class="label">Your invite code</p>
+      <p class="code-big" id="code"></p>
+      <p class="mute">Open Previously, tap <strong>Join a table</strong>, and enter this code. If you already have the app on this phone, the button below opens it straight to the table.</p>
+      <p><a class="btn" id="open" href="#">Open in Previously</a> &nbsp; <a class="btn quiet" href="/">Get the app</a></p>
+    </div>
+    <p class="fine">Previously is for iPhone and is coming to the App Store. Recording at the table only happens while someone holds the button, and only of people who have agreed.</p>
+  </div>
+
+  <div id="lost" hidden>
+    <p class="label">Not found</p>
+    <h1>That page is not in the chronicle.</h1>
+    <div class="rule"></div>
+    <p class="lede">Nothing lives at this address. Try the <a href="/">front page</a>, or write to <a href="mailto:support@previouslyrpg.com">support@previouslyrpg.com</a>.</p>
+  </div>
+
+  <footer>
+    <p><a href="/">Home</a> &middot; <a href="/privacy/">Privacy policy</a> &middot; <a href="/terms/">Terms of use</a></p>
+  </footer>
+</div>
+<script>
+  (function () {
+    var m = location.pathname.match(/^\/j\/([A-Za-z0-9-]{3,32})\/?$/)
+    var invite = document.getElementById('invite')
+    var lost = document.getElementById('lost')
+    if (m) {
+      var code = m[1].toUpperCase()
+      document.getElementById('code').textContent = code
+      document.getElementById('open').setAttribute('href', 'previously://join/' + encodeURIComponent(code))
+      document.title = 'Join a table on Previously'
+      invite.hidden = false
+    } else {
+      lost.hidden = false
+    }
+  })()
+</script>
+</body>
+</html>

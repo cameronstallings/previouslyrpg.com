@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["NRTRS5PEHR.com.previously.app"],
+        "appID": "NRTRS5PEHR.com.previously.app",
+        "paths": ["/j/*"],
+        "components": [
+          { "/": "/j/*", "comment": "Invite links open the join screen in the app" }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["NRTRS5PEHR.com.previously.app"]
+  }
+}
