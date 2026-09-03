@@ -34,7 +34,7 @@
   <p>Campaign names, session dates, the characters you build (a name, an appearance, a crest, optional notes on who they are and how to say their name), the people you invite, and the cast and threads the narrator keeps track of.</p>
 
   <h3>Moments, and the recordings behind them</h3>
-  <p>During a session you can tap a button to record a short voice clip, or type a note. Voice clips are uploaded to our storage and transcribed. <strong>Recording only happens after you tap the button. It stops when you tap again, or after one minute at most, and the app never records in the background.</strong></p>
+  <p>During a session you can tap a button to record a short voice clip, or type a note. Voice clips are uploaded to our storage and transcribed. <strong>A moment is recorded only after you tap the button, and it stops when you tap again or after one minute at most.</strong> Separately, the game master can turn on whole-session recording, which is described below: that one keeps recording while the app is in the background and while the phone is locked, until the game master turns it off, until six hours, or until the month's recording time is used.</p>
   <p>Because a voice clip at a table can capture other people, the app asks each member of a table whether they agree to be recorded, and shows everyone who has agreed. <strong>It is your responsibility to record only people who have agreed.</strong> Someone who declines can still read recaps and take part; they just cannot record.</p>
 
   <h3>Recaps</h3>
@@ -56,7 +56,8 @@
   <p>We use a small number of service providers, each of which only receives what it needs for its job:</p>
   <ul>
     <li><strong>Supabase</strong> hosts our database, sign-in and file storage (US region).</li>
-    <li><strong>ElevenLabs</strong> transcribes voice clips to text and produces the narrated audio of recaps.</li>
+    <li><strong>ElevenLabs</strong> transcribes voice clips and whole-session recordings to text and produces the narrated audio of recaps.</li>
+    <li><strong>Groq</strong> may transcribe whole-session recordings to text instead. It receives the audio and the names in your cast, so it spells them right, and does not keep them.</li>
     <li><strong>Anthropic</strong> writes the recap from the transcribed moments. We send the transcript, the names in your cast, and the character notes you chose to share; not the audio.</li>
     <li><strong>RevenueCat</strong> processes subscription status on our behalf, using an anonymous account id.</li>
     <li><strong>Apple</strong> handles payment and, if you allow it, delivers notifications through Expo's push service.</li>
@@ -67,7 +68,7 @@
   <p>We process your data to provide the service you asked for (running tables, making recaps, unlocking what you paid for), to keep the service secure, and, for optional things like notifications and recording, because you agreed. You can withdraw that agreement at any time in the app or in iOS Settings.</p>
 
   <h2>How long we keep it</h2>
-  <p>As long as your account exists, so your table's chronicle stays whole. Voice clips are kept so a recap can be regenerated if it fails. The game master can delete a session from its recap page, which removes its clips, transcripts and recap for the whole table. Deleting your account removes your sign-in, your recordings and your portraits at once; tables you run pass to the longest-standing player still at the table, or close if you were the only one left. Content you contributed to someone else's table (a recap the whole table shares) stays with that table unless the game master deletes it.</p>
+  <p>As long as your account exists, so your table's chronicle stays whole. Voice clips are kept so a recap can be regenerated if it fails. A whole-session recording (a Previously Plus feature the game master can turn on only once every adult member still at the table has agreed in the app; it stays off while anyone under 18 is at the table) is transcribed and then deleted as soon as the recap is written, including any part that could not be transcribed; the transcript stays with the session. The game master can delete a session from its recap page, which removes its clips, transcripts and recap for the whole table. Deleting your account removes your sign-in, your recordings and your portraits at once; tables you run pass to the longest-standing player still at the table, or close if you were the only one left. Content you contributed to someone else's table (a recap the whole table shares) stays with that table unless the game master deletes it.</p>
 
   <h2>Your choices and rights</h2>
   <ul>
