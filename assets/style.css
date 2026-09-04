@@ -1,4 +1,4 @@
-/* Lamplight, on the web. Same tokens as the app. */
+/* Lamplight, on the web. The app's tokens, and the app's marks. */
 :root {
   --ground: #100D09;
   --surface: #1B160F;
@@ -10,9 +10,10 @@
   --brass: #E0B75C;
   --ember: #C4593A;
   --rule: #332A1D;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { background: var(--ground); }
+html { background: var(--ground); -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--ground);
@@ -21,21 +22,23 @@ body {
   font-size: 19px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
 }
-.wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 96px; }
-header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 40px max(24px, env(safe-area-inset-right)) 96px max(24px, env(safe-area-inset-left)); }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
 .wordmark {
   font-family: 'Almendra', 'IM Fell English', Georgia, serif;
   font-size: 30px; color: var(--ink); text-decoration: none; letter-spacing: 0.02em;
 }
-nav a { color: var(--mute); text-decoration: none; margin-left: 18px; font-size: 17px; }
+nav { display: flex; gap: 4px; }
+nav a { color: var(--mute); text-decoration: none; font-size: 17px; padding: 12px 8px; display: inline-block; }
 nav a:hover { color: var(--brass); }
 h1, h2, h3 {
   font-family: 'IM Fell English', Georgia, serif; font-weight: 400; color: var(--ink); line-height: 1.2;
   margin: 0 0 12px;
 }
 h1 { font-size: 44px; }
-h2 { font-size: 27px; margin-top: 44px; }
+h2 { font-size: 27px; margin-top: 56px; }
 h3 { font-size: 21px; margin-top: 28px; }
 p, li { margin: 0 0 16px; }
 ul { padding-left: 22px; }
@@ -50,23 +53,101 @@ strong { color: var(--ink); font-weight: 600; }
 .lede { font-size: 22px; color: var(--soft); }
 .mute { color: var(--mute); }
 .fine { font-size: 15px; color: var(--mute); }
-.btn {
-  display: inline-block; background: var(--brass); color: var(--ground); text-decoration: none;
-  padding: 13px 22px; border-radius: 6px; font-weight: 600; font-size: 18px;
+
+/* The running head: a label between two rules, as over the seal in the app. */
+.head-row { display: flex; align-items: center; gap: 12px; margin: 40px 0 10px; }
+.head-row::before, .head-row::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.head-row .label { margin: 0; }
+.head-row.live .label { color: var(--ember); }
+
+/* The seal row: the page rule runs into the seal from both margins. */
+.seal-row { display: flex; align-items: center; }
+.seal-row::before, .seal-row::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.hero-seal {
+  position: relative; width: 136px; height: 136px; margin: 0 4px; padding: 0;
+  background: none; border: 0; cursor: pointer; border-radius: 50%;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
-.btn.quiet { background: transparent; color: var(--brass); border: 1px solid var(--brass); }
+.hero-seal:focus-visible { outline: 2px solid var(--brass); outline-offset: 6px; }
+.hero-seal svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-seal .bloom { position: absolute; inset: 0; border-radius: 50%; background: var(--ember); opacity: 0; transform: scale(0.92); pointer-events: none; }
+.hero-seal.live .bloom { animation: bloom 2.8s ease-in-out infinite; }
+@keyframes bloom { 0%, 100% { opacity: 0.10; transform: scale(0.92); } 50% { opacity: 0.22; transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .hero-seal.live .bloom { animation: none; opacity: 0.16; transform: none; } }
+.hero-seal .numerals {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'IM Fell English', Georgia, serif; font-size: 30px; color: var(--ink); pointer-events: none;
+}
+.hero-seal .numerals[hidden] { display: none; }
+.hero-seal .burn { display: none; }
+.hero-seal.live .burn { display: block; }
+.hero-seal.live .device { display: none; }
+.hero-seal:active .wax { fill: var(--ground); }
+.hero-seal:active .rim { stroke-opacity: 1; }
+.hero-seal:active .mill { stroke-opacity: 0.45; }
+.seal-label { text-align: center; font-size: 19px; color: var(--ink); margin: 14px 0 2px; }
+.seal-gloss { text-align: center; font-size: 15px; color: var(--mute); margin: 0 0 18px; }
+.moments { display: flex; flex-direction: column; gap: 8px; margin: 0 0 18px; }
+.moment { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; font-size: 17px; line-height: 1.5; color: var(--prose); }
+.moment .label { display: block; font-size: 11px; margin: 4px 0 0; color: var(--mute); }
+
+/* The plate: the seal's cross-section as a rectangle. Milled only when primary. */
 .plate {
-  background: var(--surface); border: 1px solid var(--brass); border-radius: 6px; padding: 22px 24px; margin: 28px 0;
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 52px; padding: 12px 24px; margin: 4px; border-radius: 6px;
+  background: var(--surface2); color: var(--ink); text-decoration: none;
+  font-family: 'EB Garamond', Georgia, serif; font-weight: 600; font-size: 18px; line-height: 1.2; text-align: center;
+  border: 1.4px solid rgba(224, 183, 92, 0.62);
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
-.plate .label { margin-bottom: 8px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin: 32px 0; }
-.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; }
-.card h3 { margin-top: 0; }
+.plate.primary { border-color: rgba(224, 183, 92, 0.82); min-width: 208px; }
+.plate .rings { position: absolute; inset: -5.4px; width: calc(100% + 10.8px); height: calc(100% + 10.8px); pointer-events: none; overflow: visible; }
+.plate .rings .mill { x: 2.2px; y: 2.2px; width: calc(100% - 4.4px); height: calc(100% - 4.4px); rx: 7.8px; ry: 7.8px; fill: none; stroke: var(--brass); stroke-width: 3.4; stroke-dasharray: 1.5 3.7; stroke-opacity: 0.30; }
+.plate .rings .inner { x: 10px; y: 10px; width: calc(100% - 20px); height: calc(100% - 20px); fill: none; stroke: var(--brass); stroke-width: 0.9; stroke-opacity: 0.32; }
+.plate.secondary .rings .mill { display: none; }
+.plate:hover { border-color: var(--brass); }
+.plate:active { background: var(--surface); border-color: var(--brass); }
+.plate:active .rings .mill { stroke-opacity: 0.45; }
+.plate:active .rings .inner { stroke-opacity: 0.5; }
+.plate:focus-visible { outline: 2px solid var(--brass); outline-offset: 5px; }
+.plate-row { display: flex; align-items: center; margin: 12px 0; }
+.plate-row::before, .plate-row::after { content: ""; flex: 1; min-width: 12px; height: 1px; background: var(--rule); }
+.plate-row.pair { flex-wrap: wrap; justify-content: center; gap: 6px; }
+.plate-row.pair::before, .plate-row.pair::after { display: none; }
+
+/* A notice: a page, not a control. Brass edge, no milling. */
+.notice { background: var(--surface); border: 1px solid var(--brass); border-radius: 6px; padding: 22px 24px; margin: 28px 0; }
+.notice .label { margin-bottom: 8px; }
+.notice h3 { margin-top: 0; }
+.notice p:last-child { margin-bottom: 0; }
+
+/* How it works: the three welcome pages, with the app's own marks. */
+.device-row { display: grid; grid-template-columns: 72px 1fr; gap: 20px; align-items: start; margin: 28px 0; }
+.device-row .device { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; }
+.device-row .device svg { width: 100%; height: 100%; }
+.device-row h3 { margin-top: 0; }
+.device-row .label { margin-bottom: 4px; }
+.device-row p:last-child { margin-bottom: 0; }
+@media (max-width: 480px) { .device-row { grid-template-columns: 56px 1fr; gap: 14px; } .device-row .device { width: 52px; height: 52px; } }
+
+/* The recap, as the app sets it: a versal, then the prose, then the fleuron. */
+.recap-head { display: flex; align-items: center; gap: 20px; margin: 8px 0 4px; }
+.recap-head svg { width: 84px; height: 84px; flex: none; }
+.recap-head h1 { margin: 0; }
+.prose { max-width: 620px; }
+.prose p { font-size: 20px; line-height: 1.55; color: var(--prose); margin: 0 0 1em; }
+.prose p:first-child::first-letter { font-family: 'Almendra', 'IM Fell English', Georgia, serif; font-size: 3.1em; line-height: 0.85; float: left; padding: 6px 10px 0 0; color: var(--brass); }
+.fleuron { display: flex; justify-content: center; margin: 28px 0; }
+.fleuron svg { width: 28px; height: 28px; }
+.listen { margin: 18px 0 6px; }
+.listen .label { margin-bottom: 6px; }
+audio { width: 100%; accent-color: var(--brass); }
+
 footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); color: var(--mute); font-size: 15px; }
-footer a { color: var(--mute); }
+footer a { color: var(--mute); display: inline-block; padding: 10px 0; }
 footer a:hover { color: var(--brass); }
 code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; color: var(--ink); background: var(--surface2); padding: 2px 6px; border-radius: 4px; }
-.code-big { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 34px; letter-spacing: 0.12em; color: var(--ink); }
+.code-big { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 34px; letter-spacing: 0.12em; color: var(--ink); overflow-wrap: anywhere; }
 .toc { columns: 2; column-gap: 24px; font-size: 17px; }
 .toc a { text-decoration: none; }
-@media (max-width: 560px) { h1 { font-size: 36px; } body { font-size: 18px; } .toc { columns: 1; } }
+@media (max-width: 560px) { h1 { font-size: 36px; } body { font-size: 18px; } .toc { columns: 1; } .hero-seal { width: 120px; height: 120px; } }
