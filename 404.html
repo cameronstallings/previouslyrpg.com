@@ -107,6 +107,7 @@
 
   <footer>
     <p><a href="/">Home</a> &middot; <a href="/privacy/">Privacy policy</a> &middot; <a href="/terms/">Terms of use</a></p>
+    <p class="fine"><a id="report" href="mailto:support@previouslyrpg.com?subject=Report%20a%20shared%20recap">Report this page</a></p>
   </footer>
 </div>
 <script>
@@ -114,6 +115,8 @@
     var invite = document.getElementById('invite')
     var recap = document.getElementById('recap')
     var lost = document.getElementById('lost')
+    document.getElementById('report').setAttribute('href',
+      'mailto:support@previouslyrpg.com?subject=Report%20a%20shared%20recap&body=' + encodeURIComponent(location.href))
 
     var j = location.pathname.match(/^\/j\/([A-Za-z0-9-]{3,32})\/?$/)
     if (j) {
