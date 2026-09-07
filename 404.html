@@ -13,6 +13,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Almendra&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
+<style>
+  /* The ceremony after the text: where the party stands, tonight's honours,
+     what was said. Set in the recap's own measure and the page's own faces;
+     the character names in the small-caps face, unforced, so initials keep
+     their full capitals. */
+  .after { max-width: 620px; margin: 28px 0 0; }
+  .after .label { margin-bottom: 8px; }
+  .after p { font-size: 20px; line-height: 1.55; color: var(--prose); margin: 0; }
+  .after .said, .after .left { font-style: italic; }
+  .honours { list-style: none; margin: 0; padding: 0; }
+  .honours li { margin: 0 0 14px; line-height: 1.4; }
+  .honours .who { font-family: 'IM Fell English SC', 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 0.06em; color: var(--brass); display: block; }
+  .honours .title { color: var(--ink); font-size: 20px; display: block; }
+  .honours .line, .quotes .who { font-size: 15px; color: var(--mute); display: block; }
+  .quotes blockquote { margin: 0 0 14px; padding: 0; }
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -55,6 +71,18 @@
     <div class="rule"></div>
     <div class="listen" id="raudio" hidden><p class="label">Listen</p></div>
     <div class="prose" id="rbody"></div>
+    <div class="after" id="rleft" hidden>
+      <p class="label">Where you left off</p>
+      <p class="left" id="rleftline"></p>
+    </div>
+    <div class="after" id="rawards" hidden>
+      <p class="label">Tonight&rsquo;s honours</p>
+      <ul class="honours" id="rhonours"></ul>
+    </div>
+    <div class="after quotes" id="rquotes" hidden>
+      <p class="label">Said at the table</p>
+      <div id="rsaid"></div>
+    </div>
     <div class="fleuron" id="rtail" hidden aria-hidden="true">
       <svg viewBox="0 0 24 24">
         <g transform="rotate(35 12 12)">
@@ -122,6 +150,21 @@
     }
 
     function text(id, value) { document.getElementById(id).textContent = value }
+    function span(cls, value) {
+      var el = document.createElement('span')
+      el.className = cls
+      el.textContent = String(value)
+      return el
+    }
+    // Text with nothing but its words, the same rule as the app's lib/prose plain().
+    function plain(value) {
+      return String(value)
+        .toLowerCase()
+        .replace(/[“”"‘’'*_]/g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/^\s+|\s+$/g, '')
+        .replace(/[.!?…]+$/, '')
+    }
 
     function gone() {
       text('rtitle', 'This recap is no longer shared.')
@@ -168,11 +211,55 @@
         }
 
         var body = document.getElementById('rbody')
-        ;(d.paragraphs || []).forEach(function (p) {
+        var paras = d.paragraphs || []
+        paras.forEach(function (p) {
           var el = document.createElement('p')
           el.textContent = p
           body.appendChild(el)
         })
+
+        // Where the party stands. The narration already closes on this line,
+        // and so may the text; when the last paragraph ends with it, it is
+        // not said twice. Compared as the app reader compares them, on the
+        // words alone: no case, quotes, closing stops or runs of space.
+        var left = typeof d.left_off === 'string' ? d.left_off.trim() : ''
+        var last = paras.length ? String(paras[paras.length - 1]).trim() : ''
+        var plainLeft = plain(left)
+        var plainLast = plain(last)
+        if (left && !(plainLast && plainLast.slice(-plainLeft.length) === plainLeft)) {
+          text('rleftline', left)
+          document.getElementById('rleft').hidden = false
+        }
+
+        // Tonight's honours: character, title, and the line that earned it.
+        var honours = document.getElementById('rhonours')
+        var awards = Array.isArray(d.awards) ? d.awards : []
+        awards.forEach(function (a) {
+          if (!a || !a.to || !a.title) return
+          var li = document.createElement('li')
+          li.appendChild(span('who', a.to))
+          li.appendChild(span('title', a.title))
+          if (a.line) li.appendChild(span('line', a.line))
+          honours.appendChild(li)
+        })
+        if (honours.childNodes.length) document.getElementById('rawards').hidden = false
+
+        // Said at the table: the words, then who said them.
+        var said = document.getElementById('rsaid')
+        var quotes = Array.isArray(d.quotes) ? d.quotes : []
+        quotes.forEach(function (q) {
+          if (!q || !q.text) return
+          var bq = document.createElement('blockquote')
+          var line = document.createElement('p')
+          line.className = 'said'
+          // The composer quotes verbatim and sometimes brings its own marks.
+          line.textContent = '“' + String(q.text).replace(/^["“”‘’']+|["“”‘’']+$/g, '') + '”'
+          bq.appendChild(line)
+          if (q.who) bq.appendChild(span('who', q.who))
+          said.appendChild(bq)
+        })
+        if (said.childNodes.length) document.getElementById('rquotes').hidden = false
+
         document.getElementById('rtail').hidden = false
         document.getElementById('rcta').hidden = false
       }).catch(gone)
