@@ -23,18 +23,21 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
+  /* Lining figures everywhere, as the app sets them: old-style figures read
+     as numbers smaller than the words around them. */
+  font-variant-numeric: lining-nums;
 }
 .wrap { max-width: 720px; margin: 0 auto; padding: 40px max(24px, env(safe-area-inset-right)) 96px max(24px, env(safe-area-inset-left)); }
 header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
 .wordmark {
-  font-family: 'Almendra', 'IM Fell English', Georgia, serif;
-  font-size: 30px; color: var(--ink); text-decoration: none; letter-spacing: 0.02em;
+  font-family: 'Alegreya', Georgia, serif; font-weight: 700;
+  font-size: 30px; color: var(--ink); text-decoration: none; letter-spacing: 0.015em;
 }
 nav { display: flex; gap: 4px; }
 nav a { color: var(--mute); text-decoration: none; font-size: 17px; padding: 12px 8px; display: inline-block; }
 nav a:hover { color: var(--brass); }
 h1, h2, h3 {
-  font-family: 'IM Fell English', Georgia, serif; font-weight: 400; color: var(--ink); line-height: 1.2;
+  font-family: 'Alegreya', Georgia, serif; font-weight: 500; color: var(--ink); line-height: 1.2;
   margin: 0 0 12px;
 }
 h1 { font-size: 44px; }
@@ -45,7 +48,7 @@ ul { padding-left: 22px; }
 a { color: var(--brass); }
 strong { color: var(--ink); font-weight: 600; }
 .label {
-  font-family: 'IM Fell English SC', 'IM Fell English', Georgia, serif;
+  font-family: 'Alegreya', Georgia, serif; font-weight: 600;
   font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass);
   margin: 0 0 10px;
 }
@@ -88,7 +91,7 @@ strong { color: var(--ink); font-weight: 600; }
 @media (prefers-reduced-motion: reduce) { .hero-seal.live .bloom { animation: none; opacity: 0.16; transform: none; } }
 .hero-seal .numerals {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'IM Fell English', Georgia, serif; font-size: 30px; color: var(--ink); pointer-events: none;
+  font-family: 'Alegreya', Georgia, serif; font-weight: 500; font-size: 30px; color: var(--ink); pointer-events: none;
 }
 .hero-seal .numerals[hidden] { display: none; }
 .hero-seal .burn { display: none; }
@@ -148,7 +151,7 @@ strong { color: var(--ink); font-weight: 600; }
 .recap-head h1 { margin: 0; }
 .prose { max-width: 620px; }
 .prose p { font-size: 20px; line-height: 1.55; color: var(--prose); margin: 0 0 1em; }
-.prose p:first-child::first-letter { font-family: 'Almendra', 'IM Fell English', Georgia, serif; font-size: 3.1em; line-height: 0.85; float: left; padding: 6px 10px 0 0; color: var(--brass); }
+.prose p:first-child::first-letter { font-family: 'Alegreya', Georgia, serif; font-weight: 700; font-size: 3.1em; line-height: 0.85; float: left; padding: 6px 10px 0 0; color: var(--brass); }
 .fleuron { display: flex; justify-content: center; margin: 28px 0; }
 .fleuron svg { width: 28px; height: 28px; }
 .listen { margin: 18px 0 6px; }

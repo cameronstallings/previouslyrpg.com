@@ -7,7 +7,7 @@
 <title>Previously: RPG Recaps</title>
 <meta name="description" content="Every session, remembered. Capture the moments at your tabletop RPG session and Previously writes and narrates a 'previously on' recap for next time.">
 <meta property="og:title" content="Previously: RPG Recaps">
-<meta property="og:description" content="Every session, remembered. Your table talks; Previously listens, and tells the story back.">
+<meta property="og:description" content="Every session, remembered. Tap the seal on the moments that matter, and Previously tells the story back.">
 <meta property="og:url" content="https://previouslyrpg.com/">
 <meta property="og:image" content="https://previouslyrpg.com/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23100D09'/%3E%3Cg transform='translate(8 8) scale(0.5)'%3E%3Ccircle cx='48' cy='48' r='38' fill='%231B160F'/%3E%3Ccircle cx='48' cy='48' r='39.8' fill='none' stroke='%23E0B75C' stroke-opacity='.3' stroke-width='3.4' stroke-dasharray='1.5 3.7'/%3E%3Ccircle cx='48' cy='48' r='38' fill='none' stroke='%23E0B75C' stroke-opacity='.7' stroke-width='1.6'/%3E%3Cpath d='M56 30 h20 v4 h-6 v34 h-4 V34 h-4 v34 h-4 V52 A11 11 0 0 1 56 30 Z' fill='%23E0B75C' fill-opacity='.9' transform='translate(-12.5 -1)'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Almendra&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
   <p class="label">For tabletop RPG tables</p>
   <h1>Every session, remembered.</h1>
   <div class="rule"></div>
-  <p class="lede">Your table talks. Previously listens, and before the next session it tells the story back, written and read aloud.</p>
+  <p class="lede">Your table plays. Tap the seal on the moments that matter, and before the next session Previously tells the story back, written and read aloud.</p>
 
   <!-- The launch film. Muted so it may play itself; the script below stops it
        for anyone who has asked for less motion. Served from this site, like
@@ -91,8 +91,8 @@
     </div>
     <div>
       <p class="label">At the table</p>
-      <h3>Tap when something happens.</h3>
-      <p class="mute">A line worth keeping, a turn nobody saw coming, the name of the innkeeper. One tap, a few words, done. Or type it.</p>
+      <h3>Tap the seal and say what happened.</h3>
+      <p class="mute">A line worth keeping, a turn nobody saw coming, the name of the innkeeper. One tap starts a short clip, you say it in a few words, and it is kept. Or type it. If the game master is recording the whole night, a tap marks the moment instead.</p>
     </div>
   </div>
 
@@ -126,12 +126,31 @@
     </div>
   </div>
 
+  <!-- The sample recap is the app's own: the one the paywall plays to a GM
+       with no table yet (SAMPLE in app/paywall.tsx). The words are copied
+       from that constant byte for byte and the mp3 is a copy of
+       assets/sample/the-causeway.mp3, so the voice says exactly what the page
+       prints. The page used to print a different recap and tell the reader to
+       "press play" with nothing to press. If the app's sample is re-narrated
+       (it is read in George, whom ElevenLabs retires on 31 December 2026),
+       replace this file and this text in the same change.
+
+       preload="none" and no autoplay: nothing is fetched and nothing makes a
+       sound until the reader presses play. The launch film above plays
+       itself only because it is muted. -->
   <h2>A recap, as it arrives</h2>
   <p class="label">A sample recap · Session VII</p>
-  <h3 style="margin-top:0">The bridge at Harrow Ford</h3>
+  <h3 style="margin-top:0">The Causeway</h3>
+  <div class="listen">
+    <p class="label" id="sample-listen">Read aloud · forty seconds</p>
+    <audio controls preload="none" src="/assets/the-causeway.mp3" aria-labelledby="sample-listen">
+      <a href="/assets/the-causeway.mp3">Listen to the sample recap</a>
+    </audio>
+  </div>
   <div class="prose">
-    <p>Previously, the company reached Harrow Ford at dusk and found the bridge held by three of the Ironhand's riders. Kael talked, badly; Wren did not talk at all, and by the time the riders understood the difference two of them were in the river. The third rode north with the news, which was the one outcome everyone had agreed to avoid.</p>
-    <p>The tollkeeper, Old Mab, fed them anyway, and mentioned, as if it were nothing, that the Ironhand's daughter had crossed the same bridge two nights before, alone, heading for the hills.</p>
+    <p>You rode out of Harrow at first light, the road east past the burned mill. Nobody comes back from the Fen, the ferryman said, and you paid him anyway.</p>
+    <p>The fight at the causeway was short and ugly. Brannoc went under the water with the thing that had him, and came up alone. Ysolde burned the reeds to get him out.</p>
+    <p>At the inn you counted what was left: three days of food, one lamp, and the map with the mark on it. Darrow put the lamp out himself.</p>
   </div>
   <div class="fleuron" aria-hidden="true">
     <svg viewBox="0 0 24 24">
