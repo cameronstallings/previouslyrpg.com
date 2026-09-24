@@ -32,6 +32,18 @@
   <div class="rule"></div>
   <p class="lede">Your table talks. Previously listens, and before the next session it tells the story back, written and read aloud.</p>
 
+  <!-- The launch film. Muted so it may play itself; the script below stops it
+       for anyone who has asked for less motion. Served from this site, like
+       everything else on the page. -->
+  <figure class="film">
+    <div class="film-frame">
+      <video id="film" src="/assets/previously-launch.mp4" poster="/assets/previously-launch-poster.jpg" controls muted autoplay loop playsinline preload="metadata" aria-label="Previously, a 25 second film about the app" aria-describedby="film-caption">
+        <a href="/assets/previously-launch.mp4">Watch the film</a>
+      </video>
+    </div>
+    <figcaption id="film-caption">One night at the table, from the first tap to the recap read aloud.<span class="credit">Music: &ldquo;Enchanted Journey&rdquo; by Kevin MacLeod (incompetech.com), edited. CC BY 4.0</span></figcaption>
+  </figure>
+
   <!-- The capture seal, exactly as it is drawn in the app, and it works: tap
        it and it records for six seconds, then a moment lands beneath it.
        Nothing here touches a microphone. -->
@@ -142,6 +154,16 @@
   </footer>
 </div>
 <script>
+  // The film plays itself only for readers who have not asked for less motion.
+  // With Reduce Motion on it waits on its poster for a tap, like everything else here.
+  (function () {
+    var film = document.getElementById('film')
+    if (!film || !window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    film.removeAttribute('autoplay')
+    film.autoplay = false
+    film.pause()
+  })()
+
   // The seal's demonstration. Tap: the head reads Recording in ember, the
   // minute burns down the rim, numerals count over the wax. Tap again or
   // wait six seconds: it stops, and the moment lands beneath as a card.

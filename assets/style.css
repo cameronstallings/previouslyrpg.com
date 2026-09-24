@@ -54,6 +54,18 @@ strong { color: var(--ink); font-weight: 600; }
 .mute { color: var(--mute); }
 .fine { font-size: 15px; color: var(--mute); }
 
+/* The film: the launch video, vertical. Capped by width so it stays a phone's
+   shape on a desktop, and by the window's height so a laptop sees it whole. */
+.film { margin: 36px 0 0; }
+.film-frame {
+  width: min(100%, 340px); width: min(100%, 340px, 44vh); width: min(100%, 340px, 44svh);
+  aspect-ratio: 9 / 16; margin: 0 auto; overflow: hidden; isolation: isolate;
+  background: #0D0C05; border: 1px solid var(--rule); border-radius: 12px;
+}
+.film-frame video { display: block; width: 100%; height: 100%; object-fit: cover; background: #0D0C05; border-radius: 11px; }
+.film figcaption { text-align: center; font-size: 15px; color: var(--mute); margin: 14px auto 0; max-width: 34em; }
+.film .credit { display: block; font-size: 12px; margin-top: 4px; }
+
 /* The running head: a label between two rules, as over the seal in the app. */
 .head-row { display: flex; align-items: center; gap: 12px; margin: 40px 0 10px; }
 .head-row::before, .head-row::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
