@@ -19,6 +19,342 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
+<style>
+/* ==========================================================================
+   THE PAGE'S MOTION, for this page only (404, the invite, privacy and terms
+   share style.css and are untouched). It acts out the night rather than
+   decorating it: the three welcome pages below each play the thing they
+   describe, in the app's own marks. Candle-slow, weighted, never a bounce.
+
+   The laws it keeps:
+   - Everything here moves only for readers who have not asked for less
+     motion. With Reduce Motion, no script, an old browser, or on paper,
+     every picture stands in its finished state: the resting style IS the
+     final frame, and the keyframes only ever describe the way there.
+   - Every entrance fills BACKWARDS, and no class ever hides anything: the
+     only hidden state is an animation's own first frame.
+   - Only transform and opacity move (clip-path for ink being written, and
+     the burn's stroke-dashoffset, as the seal itself does). Nothing moves
+     the layout.
+   - The three scenes loop, so they carry Pause animations (WCAG 2.2.2), and
+     they sleep while they are off screen.
+   ========================================================================== */
+
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes rise-far { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes draw { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes settle { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes land { from { opacity: 0; transform: translateY(-10px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes fleuron-in { from { opacity: 0; transform: rotate(-28deg) scale(.8); } to { opacity: 1; transform: none; } }
+
+/* ---- How it works: three stages, each a small scene of the app ------------- */
+.how-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; margin: 56px 0 22px; }
+.how-head h2 { margin: 0; }
+@media (max-width: 479px) { .how-head { flex-direction: column; align-items: flex-start; } }
+.pause {
+  display: inline-flex; align-items: center; gap: 9px; min-height: 44px; margin: 0; padding: 0 14px;
+  background: none; border: 1px solid var(--rule); border-radius: 6px; color: var(--mute); cursor: pointer;
+  font-family: 'Alegreya', Georgia, serif; font-weight: 600; font-size: 12px; line-height: 1; letter-spacing: 0.1em; text-transform: uppercase;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+/* Until the script shows it, it holds its place unseen, so nothing moves when
+   it appears. With scripting off it never will, and takes no room. */
+.pause[hidden] { display: inline-flex; visibility: hidden; }
+@media (scripting: none) { .pause, .pause[hidden] { display: none; } }
+.pause svg { width: 9px; height: 10px; fill: currentColor; flex: none; }
+.pause .g-play { display: none; }
+.pause[aria-pressed="true"] .g-pause { display: none; }
+.pause[aria-pressed="true"] .g-play { display: block; }
+.pause[aria-pressed="true"] { color: var(--soft); }
+.pause:hover { border-color: var(--brass); color: var(--soft); }
+.pause:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+.how { list-style: none; margin: 0; padding: 0; }
+.step { display: grid; gap: 18px; margin: 0 0 44px; }
+.step:last-child { margin-bottom: 8px; }
+.step .label { margin-bottom: 4px; }
+.step h3 { margin-top: 0; }
+.step .words p:last-child { margin-bottom: 0; }
+@media (min-width: 700px) {
+  .step { grid-template-columns: 340px 1fr; gap: 30px; align-items: center; }
+}
+
+/* A stage is lit from above by the app's own surfaces; brass stays structure. */
+.stage {
+  position: relative; overflow: hidden; min-height: 248px; padding: 18px 16px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: radial-gradient(120% 85% at 50% 0%, var(--surface2), #15110C 62%);
+  border: 1px solid var(--rule); border-radius: 6px;
+  font-variant-numeric: lining-nums;
+}
+.stage .cap {
+  font-family: 'Alegreya', Georgia, serif; font-weight: 600; font-size: 11.5px; line-height: 1;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass);
+}
+.stage .when { font-family: 'Alegreya', Georgia, serif; font-weight: 600; font-size: 10.5px; line-height: 1; letter-spacing: 0.08em; color: var(--mute); }
+.stage .card { position: relative; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; }
+
+/* 1. At the table: the seal is tapped, the minute burns, the moment lands. */
+.st1 .v-head { display: flex; align-items: center; gap: 10px; }
+.st1 .v-head::before, .st1 .v-head::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.st1 .v-word { display: grid; justify-items: center; }
+.st1 .v-word > span { grid-area: 1 / 1; }
+.st1 .v-rec { color: var(--ember); opacity: 0; }
+.st1 .v-seal-row { display: flex; align-items: center; margin: 12px 0 16px; }
+.st1 .v-seal-row::before, .st1 .v-seal-row::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.st1 .v-seal { position: relative; width: 84px; height: 84px; margin: 0 4px; flex: none; }
+.st1 .v-seal svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.st1 .v-halo {
+  position: absolute; inset: -10px; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, rgba(196,89,58,.95) 0, rgba(196,89,58,.55) 55%, rgba(196,89,58,0) 100%);
+}
+.st1 .v-burn { opacity: 0; }
+.st1 .v-num {
+  position: absolute; left: 0; right: 0; top: 50%; height: 26px; margin-top: -13px; overflow: hidden; opacity: 0;
+  text-align: center; font-family: 'Alegreya', Georgia, serif; font-weight: 500; font-size: 21px; line-height: 26px; color: var(--ink);
+}
+.st1 .v-num span { display: block; height: 26px; }
+.st1 .v-moment { padding: 10px 13px 11px; }
+/* The sentence is scaled to the stage so it stays whole on one line, and
+   may wrap rather than ever be cut. */
+.st1 .v-said { margin: 0; font-size: min(16px, 4.3vw); line-height: 1.4; color: var(--prose); }
+.st1 .v-moment .when { display: block; margin-top: 6px; }
+
+/* 2. When the night ends: End, and the moments gather into a page. The
+   cards and the page share one grid cell, so the stage is always as tall as
+   the taller of the two and nothing is cut or moves the layout. */
+.st2 .v-bar { display: flex; align-items: center; justify-content: space-between; height: 22px; margin-bottom: 12px; }
+.st2 .v-end { display: grid; justify-items: end; }
+.st2 .v-end > span { grid-area: 1 / 1; font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1; }
+.st2 .e1 { color: var(--ink); opacity: 0; }
+.st2 .e2 { color: var(--mute); font-style: italic; opacity: 0; }
+.st2 .v-field { display: grid; }
+.st2 .v-field > * { grid-area: 1 / 1; min-width: 0; }
+.st2 .v-cards { display: flex; flex-direction: column; gap: 7px; }
+.st2 .v-cards .card { min-height: 52px; padding: 8px 11px 7px; opacity: 0; }
+.st2 .v-cards .card .when { display: block; }
+.st2 .v-cards .card p { margin: 0 0 5px; font-size: min(14.5px, 3.75vw); line-height: 1.3; color: var(--prose); }
+.st2 .v-page {
+  position: relative; padding: 12px 14px 10px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--rule);
+  display: flex; flex-direction: column;
+}
+.st2 .v-page::before { content: ""; position: absolute; left: 14px; right: 14px; top: 38px; height: 1px; background: linear-gradient(90deg, var(--brass) 0 26px, var(--rule) 26px); }
+.st2 .v-title { margin: 0 0 16px; font-family: 'Alegreya', Georgia, serif; font-weight: 500; font-size: 17px; line-height: 20px; color: var(--ink); }
+.st2 .v-text { position: relative; margin-bottom: 10px; }
+.st2 .v-versal {
+  position: absolute; left: 0; top: 1px; font-family: 'Alegreya', Georgia, serif; font-weight: 700; font-size: 38px; line-height: 34px; color: var(--brass);
+}
+.st2 .v-l { margin: 0; font-size: min(13.5px, 3.85vw); line-height: 18.5px; color: var(--prose); }
+.st2 .v-l.ind { padding-left: 27px; }
+.st2 .v-fleuron { display: flex; justify-content: center; margin-top: auto; }
+.st2 .v-fleuron svg { width: 18px; height: 18px; }
+
+/* 3. Next time: press play, and the story is told back. */
+.st3 .v-player { display: flex; align-items: center; gap: 14px; }
+.st3 .v-disc { position: relative; width: 52px; height: 52px; flex: none; }
+.st3 .v-disc svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.st3 .v-disc .hot { opacity: 0; }
+.st3 .v-disc .pz { opacity: 0; }
+.st3 .v-who { display: grid; gap: 5px; }
+.st3 .v-who b { font-family: 'Alegreya', Georgia, serif; font-weight: 500; font-size: 19px; line-height: 1.1; color: var(--ink); }
+.st3 .v-track { position: relative; height: 1px; margin: 16px 0 14px; background: var(--rule); }
+.st3 .v-fill { position: absolute; inset: 0; background: var(--brass); transform-origin: left center; }
+.st3 .v-read p { margin: 0; font-size: min(15px, 4.1vw); line-height: 1.55; color: var(--prose); }
+
+/* The loops, 12 seconds each; 1% is 120 ms. */
+@keyframes s1-press {
+  0%, 7.5% { transform: none; animation-timing-function: cubic-bezier(.3,0,.6,1); }
+  8.5% { transform: scale(.93); animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+  11%, 52.5% { transform: none; animation-timing-function: cubic-bezier(.3,0,.6,1); }
+  53.5% { transform: scale(.93); animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+  56%, 100% { transform: none; }
+}
+@keyframes s1-on { 0%, 8.5% { opacity: 0; } 10%, 53.5% { opacity: 1; } 55%, 100% { opacity: 0; } }
+@keyframes s1-off { 0%, 8.5% { opacity: 1; } 10%, 53.5% { opacity: 0; } 55%, 100% { opacity: 1; } }
+/* The halo follows a voice, the way the app's meter follows the room: read
+   ten times a second and moved to linearly, never eased, never bounced. */
+@keyframes s1-halo {
+  0%, 10% { opacity: 0; }
+  11.5% { opacity: .30; } 13% { opacity: .16; } 14.5% { opacity: .46; } 16% { opacity: .24; }
+  17.5% { opacity: .52; } 19% { opacity: .32; } 20.5% { opacity: .42; } 22% { opacity: .12; }
+  25% { opacity: .10; } 26.5% { opacity: .40; } 28% { opacity: .22; } 29.5% { opacity: .48; }
+  31% { opacity: .28; } 32.5% { opacity: .55; } 34% { opacity: .18; } 35.5% { opacity: .42; }
+  37% { opacity: .30; } 38.5% { opacity: .12; } 41% { opacity: .10; } 42.5% { opacity: .46; }
+  44% { opacity: .24; } 45.5% { opacity: .40; } 47% { opacity: .18; } 48.5% { opacity: .34; }
+  50% { opacity: .10; } 53.5%, 100% { opacity: 0; }
+}
+/* The head and the seal stand centred on the empty stage, and make room as
+   the moment lands beneath them. */
+@keyframes s1-room {
+  0%, 55% { transform: translateY(39px); animation-timing-function: cubic-bezier(.45,0,.25,1); }
+  61%, 96.667% { transform: none; animation-timing-function: cubic-bezier(.45,0,.35,1); }
+  100% { transform: translateY(39px); }
+}
+/* Five seconds of the minute, burnt down the rim: 55 sixtieths left. */
+@keyframes s1-arc { 0%, 10% { stroke-dashoffset: 216.77; } 51.667%, 55% { stroke-dashoffset: 198.71; } 56%, 100% { stroke-dashoffset: 216.77; } }
+@keyframes s1-count { 0%, 10% { transform: translateY(0); animation-timing-function: steps(5, end); } 51.667%, 100% { transform: translateY(-130px); } }
+/* The card is set down once the seal has mostly made room (it starts at
+   58.5%, when the head is 83% of the way up), so it never crosses the seal. */
+@keyframes s1-land {
+  0%, 58.5% { opacity: 0; transform: translateY(-14px); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  64.5%, 91.667% { opacity: 1; transform: none; animation-timing-function: ease-in-out; }
+  96.667%, 100% { opacity: 0; transform: none; }
+}
+/* The words are written as the card settles, not after it. */
+@keyframes s1-ink { 0%, 60.5% { clip-path: inset(0 100% 0 0); animation-timing-function: cubic-bezier(.45,.05,.55,.95); } 68.833%, 100% { clip-path: inset(0 0 0 0); } }
+
+@keyframes s2-c1 {
+  0%, 2.5% { opacity: 0; transform: translateY(10px); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  8.333%, 30% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  39% { opacity: 1; transform: translateY(59px) rotate(-2.5deg) scale(.9); animation-timing-function: ease-in; }
+  43.333%, 100% { opacity: 0; transform: translateY(59px) rotate(-2.5deg) scale(.88); }
+}
+@keyframes s2-c2 {
+  0%, 7.5% { opacity: 0; transform: translateY(10px); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  13.333%, 30% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  39% { opacity: 1; transform: rotate(1.2deg) scale(.9); animation-timing-function: ease-in; }
+  43.333%, 100% { opacity: 0; transform: rotate(1.2deg) scale(.88); }
+}
+@keyframes s2-c3 {
+  0%, 12.5% { opacity: 0; transform: translateY(10px); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  18.333%, 30% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  39% { opacity: 1; transform: translateY(-59px) rotate(2.8deg) scale(.9); animation-timing-function: ease-in; }
+  43.333%, 100% { opacity: 0; transform: translateY(-59px) rotate(2.8deg) scale(.88); }
+}
+/* As the moments gather, their words go out, so what stacks is blank leaves. */
+@keyframes s2-blank { 0%, 30% { opacity: 1; } 35.5%, 100% { opacity: 0; } }
+@keyframes s2-end-press { 0%, 24.5% { transform: none; } 25.5% { transform: scale(.9); } 27.5%, 100% { transform: none; } }
+@keyframes s2-e1 { 0%, 25.5% { opacity: 1; } 27%, 96.667% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes s2-e2 { 0%, 26.5% { opacity: 0; } 28.5%, 75% { opacity: 1; } 78.333%, 100% { opacity: 0; } }
+@keyframes s2-page {
+  0%, 36.667% { opacity: 0; transform: translateY(8px) scale(.96); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  45%, 91.667% { opacity: 1; transform: none; animation-timing-function: ease-in-out; }
+  96.667%, 100% { opacity: 0; transform: none; }
+}
+/* The versal and the first line begin as the page lands, so the page never
+   stands with only its title. */
+@keyframes s2-versal { 0%, 41.667% { opacity: 0; } 45.833%, 100% { opacity: 1; } }
+@keyframes s2-l1 { 0%, 43% { clip-path: inset(0 100% 0 0); } 50.5%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes s2-l2 { 0%, 49.667% { clip-path: inset(0 100% 0 0); } 57.167%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes s2-l3 { 0%, 56.333% { clip-path: inset(0 100% 0 0); } 63.833%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes s2-l4 { 0%, 63% { clip-path: inset(0 100% 0 0); } 70.5%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes s2-fleuron {
+  0%, 70.5% { opacity: 0; transform: rotate(-28deg) scale(.7); animation-timing-function: cubic-bezier(.2,.7,.25,1); }
+  77.167%, 100% { opacity: 1; transform: none; }
+}
+
+/* The recap lines stay at full ink throughout: only the press, the play and
+   pause marks, the ring and the brass track move. */
+@keyframes s3-press { 0%, 7.5% { transform: none; } 8.5% { transform: scale(.92); } 11%, 100% { transform: none; } }
+@keyframes s3-play { 0%, 8.333% { opacity: 1; } 9.167%, 80% { opacity: 0; } 81.667%, 100% { opacity: 1; } }
+@keyframes s3-pause { 0%, 8.333% { opacity: 0; } 9.167%, 80% { opacity: 1; } 81.667%, 100% { opacity: 0; } }
+@keyframes s3-fill {
+  0%, 10% { opacity: 1; transform: scaleX(0); }
+  80%, 91.667% { opacity: 1; transform: none; }
+  96.667% { opacity: 0; transform: none; }
+  97.5%, 100% { opacity: 0; transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The opening: the words rise in, and the brass rule is drawn. */
+  header + .label { animation: rise 1100ms cubic-bezier(.2,.65,.25,1) backwards; }
+  header + .label + h1 { animation: rise 1100ms cubic-bezier(.2,.65,.25,1) 110ms backwards; }
+  header + .label + h1 + .rule { transform-origin: left center; animation: draw 1300ms cubic-bezier(.65,0,.35,1) 380ms backwards; }
+  header + .label + h1 + .rule + .lede { animation: rise 1100ms cubic-bezier(.2,.65,.25,1) 300ms backwards; }
+
+  /* Reveals. The script adds .in just BEFORE an element scrolls into view,
+     and never to one already on screen, with a 90 ms stagger. */
+  [data-reveal].in { animation: rise 1000ms cubic-bezier(.2,.65,.25,1) var(--d, 0ms) backwards; }
+  .fleuron.in { animation: none; }
+  .fleuron.in svg { animation: fleuron-in 1300ms cubic-bezier(.2,.65,.25,1) var(--d, 0ms) backwards; }
+  .step.in { animation: none; }
+  .step.in .stage { animation: rise-far 1100ms cubic-bezier(.2,.65,.25,1) var(--d, 0ms) backwards; }
+  .step.in .words { animation: rise 1000ms cubic-bezier(.2,.65,.25,1) calc(var(--d, 0ms) + 140ms) backwards; }
+
+  /* The seal arrives: the head's rules draw out from Capture, the page rule
+     runs in toward the seal, the seal settles, and the words come up. */
+  .capture.in { animation: none; }
+  .capture.in .head-row::before { transform-origin: right center; animation: draw 1000ms cubic-bezier(.65,0,.35,1) backwards; }
+  .capture.in .head-row::after { transform-origin: left center; animation: draw 1000ms cubic-bezier(.65,0,.35,1) backwards; }
+  .capture.in .head-row .label { animation: fade 800ms ease-out 150ms backwards; }
+  .capture.in .seal-row::before { transform-origin: left center; animation: draw 1100ms cubic-bezier(.65,0,.35,1) 120ms backwards; }
+  .capture.in .seal-row::after { transform-origin: right center; animation: draw 1100ms cubic-bezier(.65,0,.35,1) 120ms backwards; }
+  .capture.in .hero-seal > svg { animation: settle 1000ms cubic-bezier(.2,.65,.25,1) 260ms backwards; }
+  .capture.in .seal-label { animation: rise 900ms cubic-bezier(.2,.65,.25,1) 520ms backwards; }
+  .capture.in .seal-gloss { animation: rise 900ms cubic-bezier(.2,.65,.25,1) 600ms backwards; }
+  .capture.in .fine { animation: fade 900ms ease-out 700ms backwards; }
+
+  /* A moment card is set down beneath the seal, not dropped. */
+  .moments .moment { animation: land 700ms cubic-bezier(.2,.65,.25,1) backwards; }
+
+  /* A loop runs only once its step is near the screen (the script adds .on),
+     so a reader coming down to it arrives at the start of the scene, not the
+     middle. The one exception is .late, below. */
+  .step.on .sd, .step.on .st2 .card > * {
+    animation-duration: 12s; animation-timing-function: linear;
+    animation-iteration-count: infinite; animation-fill-mode: both; animation-delay: 250ms;
+  }
+  .step.away .sd, .step.away .st2 .card > * { animation-play-state: paused; }
+  /* On a wide screen the three can come into view together: let them take turns. */
+  @media (min-width: 700px) {
+    .step.on.s2 .sd, .step.on.s2 .st2 .card > * { animation-delay: 1000ms; }
+    .step.on.s3 .sd { animation-delay: 1750ms; }
+  }
+  /* A scene first armed while it is already on screen (a reload that restores
+     the scroll, a jump, a tall screen, or scrolled up into) joins its loop at
+     the finished frame it is showing, instead of cutting to the start. Each
+     offset sits inside its scene's finished stretch (s1 8.26 to 11 s, s2 9.4
+     to 11 s, s3 9.8 to 11 s), and they differ, so the three still take
+     turns. This comes after the wide-screen delays, and wins over them. */
+  .step.s1 { --late: -8.4s; } .step.s2 { --late: -9.6s; } .step.s3 { --late: -10s; }
+  .step.on.late .sd, .step.on.late .st2 .card > * { animation-delay: var(--late); }
+
+  .step.on .st1 .v-seal { animation-name: s1-press; }
+  .step.on .st1 .v-rec, .step.on .st1 .v-burn, .step.on .st1 .v-num { animation-name: s1-on; }
+  .step.on .st1 .v-cap, .step.on .st1 .v-device { animation-name: s1-off; }
+  .step.on .st1 .v-halo { animation-name: s1-halo; }
+  .step.on .st1 .v-arc { animation-name: s1-arc; }
+  .step.on .st1 .v-strip { animation-name: s1-count; }
+  .step.on .st1 .v-moment { animation-name: s1-land; }
+  .step.on .st1 .v-said { animation-name: s1-ink; }
+  .step.on .st1 .v-top { animation-name: s1-room; }
+
+  .step.on .st2 .card > * { animation-name: s2-blank; }
+  .step.on .st2 .c1 { animation-name: s2-c1; }
+  .step.on .st2 .c2 { animation-name: s2-c2; }
+  .step.on .st2 .c3 { animation-name: s2-c3; }
+  .step.on .st2 .v-end { animation-name: s2-end-press; }
+  .step.on .st2 .e1 { animation-name: s2-e1; }
+  .step.on .st2 .e2 { animation-name: s2-e2; }
+  .step.on .st2 .v-page { animation-name: s2-page; }
+  .step.on .st2 .v-versal { animation-name: s2-versal; }
+  .step.on .st2 .l1 { animation-name: s2-l1; }
+  .step.on .st2 .l2 { animation-name: s2-l2; }
+  .step.on .st2 .l3 { animation-name: s2-l3; }
+  .step.on .st2 .l4 { animation-name: s2-l4; }
+  .step.on .st2 .v-fleuron svg { animation-name: s2-fleuron; }
+
+  .step.on .st3 .v-disc { animation-name: s3-press; }
+  .step.on .st3 .pl { animation-name: s3-play; }
+  .step.on .st3 .pz, .step.on .st3 .hot { animation-name: s3-pause; }
+  .step.on .st3 .v-fill { animation-name: s3-fill; }
+
+  /* Paused: every picture stands in its finished frame. */
+  .how.paused .sd, .how.paused .st2 .card > * { animation: none !important; }
+
+  .pause { transition: transform 180ms cubic-bezier(.2,.7,.2,1); }
+  .pause:active { transform: scale(.97); transition-duration: 80ms; }
+}
+@media (prefers-reduced-motion: reduce) { .pause, .pause[hidden] { display: none; } }
+
+/* On paper every picture is its finished frame, and the Pause is not needed. */
+@media print {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .pause, .pause[hidden] { display: none !important; }
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -47,7 +383,7 @@
   <!-- The capture seal, exactly as it is drawn in the app, and it works: tap
        it and it records for six seconds, then a moment lands beneath it.
        Nothing here touches a microphone. -->
-  <section aria-label="The capture seal">
+  <section class="capture" aria-label="The capture seal" data-reveal>
     <div class="head-row"><span class="label" id="seal-head">Capture</span></div>
     <div class="seal-row">
       <button class="hero-seal" id="seal" type="button" aria-pressed="false" aria-label="Tap to capture. A demonstration; nothing is recorded on this page.">
@@ -72,59 +408,127 @@
     <p class="fine">Try it. Nothing is recorded on this page; this is the seal as it is at the table. At the table you say one sentence about what just happened, and Previously keeps it.</p>
   </section>
 
-  <div class="notice">
+  <div class="notice" data-reveal>
     <p class="label">Coming to the App Store</p>
     <p>Previously is for iPhone. Every table keeps its three most recent recaps for free, forever. Previously Plus keeps the whole archive, and one payment by the game master unlocks it for everyone at the table.</p>
   </div>
 
-  <h2 id="how">How it works</h2>
-
-  <!-- The three welcome pages of the app, word for word (app/welcome.tsx),
-       with the marks the app uses for them. Change one and change the other. -->
-  <div class="device-row">
-    <div class="device" aria-hidden="true">
-      <svg viewBox="0 0 96 96">
-        <circle cx="48" cy="48" r="38" fill="none" stroke="#E0B75C" stroke-opacity=".5" stroke-width="1.3"/>
-        <circle cx="48" cy="48" r="39.8" fill="none" stroke="#E0B75C" stroke-opacity=".22" stroke-width="3.2" stroke-dasharray="1.5 3.7"/>
-        <path d="M56 30 h20 v4 h-6 v34 h-4 V34 h-4 v34 h-4 V52 A11 11 0 0 1 56 30 Z" fill="#E0B75C" fill-opacity=".85" transform="translate(-12.5 -1)"/>
-      </svg>
-    </div>
-    <div>
-      <p class="label">At the table</p>
-      <h3>Tap the seal and say what happened.</h3>
-      <p class="mute">A line worth keeping, a turn nobody saw coming, the name of the innkeeper. One tap starts a short clip, you say it in a few words, and it is kept. Or type it. If the game master is recording the whole night, a tap marks the moment instead.</p>
-    </div>
+  <!-- The three welcome pages of the app, word for word (app/welcome.tsx).
+       Change one and change the other. Each stands beside a small scene that
+       plays what it says, drawn in the app's own marks; the scenes are
+       pictures (aria-hidden), and the words beside them are the page. Every
+       scene's resting style is its last frame, so with Reduce Motion, with
+       no script, paused, or printed, it shows the finished picture. The words
+       inside the scenes are the page's own: the seal's sample lines, in the
+       order they were said, and the sample recap below. -->
+  <div class="how-head">
+    <h2 id="how" data-reveal>How it works</h2>
+    <button class="pause" id="how-pause" type="button" aria-pressed="false" aria-controls="how-list" data-reveal hidden>
+      <svg class="g-pause" viewBox="0 0 9 10" aria-hidden="true"><path d="M0.5 0h2.6v10H0.5zM5.9 0h2.6v10H5.9z"/></svg>
+      <svg class="g-play" viewBox="0 0 9 10" aria-hidden="true"><path d="M0.5 0l8.5 5-8.5 5z"/></svg>
+      <span>Pause animations</span>
+    </button>
   </div>
 
-  <div class="device-row">
-    <div class="device" aria-hidden="true">
-      <svg viewBox="0 0 24 24" style="width:44px;height:44px">
-        <g transform="rotate(35 12 12)">
-          <path d="M12 22.5 C 11 19, 8.8 17.2, 6.2 16.2 C 3.2 15, 1.8 12.2, 3 9.6 C 4 7.4, 6.6 6.6, 8.6 7.8 C 9.6 8.4, 10.4 9.3, 11 10.3 C 10.6 8.2, 10.8 6, 12 4.2 C 13.2 6, 13.4 8.2, 13 10.3 C 13.6 9.3, 14.4 8.4, 15.4 7.8 C 17.4 6.6, 20 7.4, 21 9.6 C 22.2 12.2, 20.8 15, 17.8 16.2 C 15.2 17.2, 13 19, 12 22.5 Z" fill="#E0B75C" fill-opacity=".72"/>
-          <path d="M12 4.2 C 12.6 2.6, 14.2 1.6, 16.2 1.8 C 17.6 2, 18.6 2.8, 19 3.8" fill="none" stroke="#E0B75C" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"/>
-        </g>
-      </svg>
-    </div>
-    <div>
-      <p class="label">When the night ends</p>
-      <h3>The GM ends the session.</h3>
-      <p class="mute">Everything the table captured is written into one recap, told as a story, by the time you are home.</p>
-    </div>
-  </div>
+  <ol class="how" id="how-list" role="list" aria-labelledby="how">
+    <li class="step s1" data-reveal>
+      <div class="stage st1" aria-hidden="true">
+        <div class="v-top sd">
+        <div class="v-head"><span class="v-word"><span class="cap v-cap sd">Capture</span><span class="cap v-rec sd">Recording</span></span></div>
+        <div class="v-seal-row">
+          <div class="v-seal sd">
+            <span class="v-halo sd"></span>
+            <svg viewBox="0 0 96 96">
+              <circle cx="48" cy="48" r="38" fill="#1B160F"/>
+              <circle cx="48" cy="48" r="39.8" fill="none" stroke="#E0B75C" stroke-opacity=".26" stroke-width="3.4" stroke-dasharray="1.5 3.7"/>
+              <circle cx="48" cy="48" r="38" fill="none" stroke="#E0B75C" stroke-opacity=".62" stroke-width="1.4"/>
+              <circle cx="48" cy="48" r="30.5" fill="none" stroke="#E0B75C" stroke-opacity=".32" stroke-width=".9"/>
+              <g class="v-burn sd">
+                <circle cx="48" cy="48" r="34.5" fill="none" stroke="#C4593A" stroke-opacity=".24" stroke-width="2.4"/>
+                <circle class="v-arc sd" cx="48" cy="48" r="34.5" fill="none" stroke="#C4593A" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="216.77" stroke-dashoffset="216.77" transform="rotate(-90 48 48)"/>
+              </g>
+              <path class="v-device sd" d="M56 30 h20 v4 h-6 v34 h-4 V34 h-4 v34 h-4 V52 A11 11 0 0 1 56 30 Z" fill="#E0B75C" fill-opacity=".86" transform="translate(-12.5 -1)"/>
+            </svg>
+            <span class="v-num sd"><span class="v-strip sd"><span>0:00</span><span>0:01</span><span>0:02</span><span>0:03</span><span>0:04</span><span>0:05</span></span></span>
+          </div>
+        </div>
+        </div>
+        <div class="card v-moment sd">
+          <p class="v-said sd">The ferryman says nobody comes back from the Fen.</p>
+          <span class="when">9:14 PM · 5s</span>
+        </div>
+      </div>
+      <div class="words">
+        <p class="label">At the table</p>
+        <h3>Tap the seal and say what happened.</h3>
+        <p class="mute">A line worth keeping, a turn nobody saw coming, the name of the innkeeper. One tap starts a short clip, you say it in a few words, and it is kept. Or type it. If the game master is recording the whole night, a tap marks the moment instead.</p>
+      </div>
+    </li>
 
-  <div class="device-row">
-    <div class="device" aria-hidden="true">
-      <svg viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="31" fill="none" stroke="#E0B75C" stroke-width="1.3"/>
-        <path d="M7.5 4.2 L19.2 11.4 a0.7 0.7 0 0 1 0 1.2 L7.5 19.8 Z" fill="#F6EEDD" transform="translate(32 32) scale(0.92) translate(-12 -12)"/>
-      </svg>
-    </div>
-    <div>
-      <p class="label">Next time</p>
-      <h3>Previously on…</h3>
-      <p class="mute">Press play. Ninety seconds later everyone remembers where you were, and the game begins.</p>
-    </div>
-  </div>
+    <li class="step s2" data-reveal>
+      <div class="stage st2" aria-hidden="true">
+        <div class="v-bar"><span class="cap">Session VII</span><span class="v-end sd"><span class="e1 sd">End</span><span class="e2 sd">Writing</span></span></div>
+        <div class="v-field">
+          <div class="v-cards">
+            <div class="card c1 sd"><p>Left Harrow at first light, past the burned mill.</p><span class="when">8:02 PM · 4s</span></div>
+            <div class="card c2 sd"><p>The ferryman says nobody comes back from the Fen.</p><span class="when">9:14 PM · 5s</span></div>
+            <div class="card c3 sd"><p>We paid him anyway.</p><span class="when">10:47 PM · 3s</span></div>
+          </div>
+          <div class="v-page sd">
+            <p class="v-title">The Causeway</p>
+            <div class="v-text">
+              <span class="v-versal sd">Y</span>
+              <p class="v-l ind l1 sd">ou rode out of Harrow at first light,</p>
+              <p class="v-l ind l2 sd">the road east past the burned mill.</p>
+              <p class="v-l l3 sd">Nobody comes back from the Fen, the</p>
+              <p class="v-l l4 sd">ferryman said, and you paid him anyway.</p>
+            </div>
+            <div class="v-fleuron">
+              <svg class="sd" viewBox="0 0 24 24">
+                <g transform="rotate(35 12 12)">
+                  <path d="M12 22.5 C 11 19, 8.8 17.2, 6.2 16.2 C 3.2 15, 1.8 12.2, 3 9.6 C 4 7.4, 6.6 6.6, 8.6 7.8 C 9.6 8.4, 10.4 9.3, 11 10.3 C 10.6 8.2, 10.8 6, 12 4.2 C 13.2 6, 13.4 8.2, 13 10.3 C 13.6 9.3, 14.4 8.4, 15.4 7.8 C 17.4 6.6, 20 7.4, 21 9.6 C 22.2 12.2, 20.8 15, 17.8 16.2 C 15.2 17.2, 13 19, 12 22.5 Z" fill="#E0B75C" fill-opacity=".72"/>
+                  <path d="M12 4.2 C 12.6 2.6, 14.2 1.6, 16.2 1.8 C 17.6 2, 18.6 2.8, 19 3.8" fill="none" stroke="#E0B75C" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="words">
+        <p class="label">When the night ends</p>
+        <h3>The GM ends the session.</h3>
+        <p class="mute">Everything the table captured is written into one recap, told as a story, by the time you are home.</p>
+      </div>
+    </li>
+
+    <li class="step s3" data-reveal>
+      <div class="stage st3" aria-hidden="true">
+        <div class="v-player">
+          <div class="v-disc sd">
+            <svg viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="31" fill="#1B160F" stroke="#E0B75C" stroke-opacity=".62" stroke-width="1.3"/>
+              <circle class="hot sd" cx="32" cy="32" r="31" fill="none" stroke="#E0B75C" stroke-width="1.3"/>
+              <path class="pl sd" d="M7.5 4.2 L19.2 11.4 a0.7 0.7 0 0 1 0 1.2 L7.5 19.8 Z" fill="#F6EEDD" transform="translate(32 32) scale(0.92) translate(-12 -12)"/>
+              <path class="pz sd" d="M8.5 4.5 h3 v15 h-3 Z M14.5 4.5 h3 v15 h-3 Z" fill="#F6EEDD" transform="translate(32 32) scale(0.92) translate(-13 -12)"/>
+            </svg>
+          </div>
+          <div class="v-who"><span class="cap">Previously on…</span><b>The Causeway</b></div>
+        </div>
+        <div class="v-track"><span class="v-fill sd"></span></div>
+        <div class="v-read">
+          <p>The fight at the causeway was short</p>
+          <p>and ugly. Brannoc went under the water</p>
+          <p>with the thing that had him, and came</p>
+          <p>up alone.</p>
+        </div>
+      </div>
+      <div class="words">
+        <p class="label">Next time</p>
+        <h3>Previously on…</h3>
+        <p class="mute">Press play. Ninety seconds later everyone remembers where you were, and the game begins.</p>
+      </div>
+    </li>
+  </ol>
 
   <!-- The sample recap is the app's own: the one the paywall plays to a GM
        with no table yet (SAMPLE in app/paywall.tsx). The words are copied
@@ -138,21 +542,21 @@
        preload="none" and no autoplay: nothing is fetched and nothing makes a
        sound until the reader presses play. The launch film above plays
        itself only because it is muted. -->
-  <h2>A recap, as it arrives</h2>
-  <p class="label">A sample recap · Session VII</p>
-  <h3 style="margin-top:0">The Causeway</h3>
-  <div class="listen">
+  <h2 data-reveal>A recap, as it arrives</h2>
+  <p class="label" data-reveal>A sample recap · Session VII</p>
+  <h3 style="margin-top:0" data-reveal>The Causeway</h3>
+  <div class="listen" data-reveal>
     <p class="label" id="sample-listen">Read aloud · forty seconds</p>
     <audio controls preload="none" src="/assets/the-causeway.mp3" aria-labelledby="sample-listen">
       <a href="/assets/the-causeway.mp3">Listen to the sample recap</a>
     </audio>
   </div>
   <div class="prose">
-    <p>You rode out of Harrow at first light, the road east past the burned mill. Nobody comes back from the Fen, the ferryman said, and you paid him anyway.</p>
-    <p>The fight at the causeway was short and ugly. Brannoc went under the water with the thing that had him, and came up alone. Ysolde burned the reeds to get him out.</p>
-    <p>At the inn you counted what was left: three days of food, one lamp, and the map with the mark on it. Darrow put the lamp out himself.</p>
+    <p data-reveal>You rode out of Harrow at first light, the road east past the burned mill. Nobody comes back from the Fen, the ferryman said, and you paid him anyway.</p>
+    <p data-reveal>The fight at the causeway was short and ugly. Brannoc went under the water with the thing that had him, and came up alone. Ysolde burned the reeds to get him out.</p>
+    <p data-reveal>At the inn you counted what was left: three days of food, one lamp, and the map with the mark on it. Darrow put the lamp out himself.</p>
   </div>
-  <div class="fleuron" aria-hidden="true">
+  <div class="fleuron" aria-hidden="true" data-reveal>
     <svg viewBox="0 0 24 24">
       <g transform="rotate(35 12 12)">
         <path d="M12 22.5 C 11 19, 8.8 17.2, 6.2 16.2 C 3.2 15, 1.8 12.2, 3 9.6 C 4 7.4, 6.6 6.6, 8.6 7.8 C 9.6 8.4, 10.4 9.3, 11 10.3 C 10.6 8.2, 10.8 6, 12 4.2 C 13.2 6, 13.4 8.2, 13 10.3 C 13.6 9.3, 14.4 8.4, 15.4 7.8 C 17.4 6.6, 20 7.4, 21 9.6 C 22.2 12.2, 20.8 15, 17.8 16.2 C 15.2 17.2, 13 19, 12 22.5 Z" fill="#E0B75C" fill-opacity=".72"/>
@@ -160,9 +564,9 @@
       </g>
     </svg>
   </div>
-  <p class="fine">A sample. Yours is written from the moments your table captured, and read aloud by a narrator who has been taught how to say your names.</p>
+  <p class="fine" data-reveal>A sample. Yours is written from the moments your table captured, and read aloud by a narrator who has been taught how to say your names.</p>
 
-  <div class="notice">
+  <div class="notice" data-reveal>
     <p class="label">Previously Plus</p>
     <h3>Free keeps the last three. Plus keeps them all.</h3>
     <p>One payment by the game master unlocks the whole archive for everyone at the table, and lets the whole session be recorded, so nothing depends on someone remembering to tap.</p>
@@ -173,6 +577,13 @@
   </footer>
 </div>
 <script>
+  // Every function below is wrapped as (function () { ... })(); and each one
+  // ENDS IN A SEMICOLON. Without it, the next one's opening parenthesis is
+  // read as a call on the one before: on 23 September the browser ran the
+  // film's script and the seal's as one expression, and the seal's
+  // demonstration threw on every load (fixed in 47219a6). Keep the semicolon
+  // on any function added or moved here.
+
   // The film plays itself only for readers who have not asked for less motion.
   // With Reduce Motion on it waits on its poster for a tap, like everything else here.
   (function () {
@@ -182,6 +593,10 @@
     film.autoplay = false
     film.pause()
   })();
+
+  // iOS Safari only draws :active (the seal's press) on a page that listens
+  // for touches. This listener does nothing else.
+  document.addEventListener('touchstart', function () {}, { passive: true });
 
   // The seal's demonstration. Tap: the head reads Recording in ember, the
   // minute burns down the rim, numerals count over the wax. Tap again or
@@ -249,6 +664,80 @@
     seal.addEventListener('click', function () {
       if (seal.classList.contains('live')) stop(Date.now() - start)
       else begin()
+    })
+  })();
+
+  // Reveals. Each marked element gets .in only while it is still below the
+  // screen, in the pre-roll (120 px early), so it is never on screen in a
+  // hidden state set by a class. Any element already on screen when it is
+  // first seen (at load, or after a jump: keyboard focus, find-in-page, a
+  // restored scroll, a fast flick), or arriving from above, is left alone at
+  // full ink. Elements arriving together are staggered 90 ms apart, 450 ms
+  // at most. With Reduce Motion, no observer, or no script, nothing is
+  // marked and the page simply stands.
+  (function () {
+    if (!('IntersectionObserver' in window) || !window.matchMedia) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    var els = document.querySelectorAll('[data-reveal]')
+    var io = new IntersectionObserver(function (entries) {
+      var n = 0, vh = window.innerHeight || document.documentElement.clientHeight
+      for (var i = 0; i < entries.length; i++) {
+        var e = entries[i]
+        if (!e.isIntersecting) continue
+        io.unobserve(e.target)
+        // Already on screen, or coming in from above: it has been drawn as it
+        // is, so it stays standing.
+        if (e.boundingClientRect.top < vh) continue
+        e.target.style.setProperty('--d', Math.min(n++, 5) * 90 + 'ms')
+        e.target.classList.add('in')
+      }
+    }, { rootMargin: '0px 0px 120px 0px' })
+    for (var i = 0; i < els.length; i++) io.observe(els[i])
+  })();
+
+  // How it works: each scene starts from its first frame as it nears the
+  // screen from below, sleeps while it is off screen, and stops on its
+  // finished frame when Pause animations is pressed (aria-pressed carries the
+  // state; the name stays the same). A scene first started while it is
+  // already on screen (a restored scroll, a jump, a tall screen, or scrolled
+  // up into) is marked .late and joins its loop at the finished frame it is
+  // showing, so it never cuts to an empty stage. .late is set only as a loop
+  // is created (here, or on Play below), never on a running one, which would
+  // make it jump. With Reduce Motion the CSS runs none of it and the button
+  // stays hidden; with no script the scenes simply stand finished.
+  (function () {
+    var how = document.getElementById('how-list')
+    var btn = document.getElementById('how-pause')
+    if (!how || !btn) return
+    var steps = Array.prototype.slice.call(how.querySelectorAll('.step'))
+    var vh = function () { return window.innerHeight || document.documentElement.clientHeight }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            if (!e.target.classList.contains('on') && e.boundingClientRect.top < vh()) e.target.classList.add('late')
+            e.target.classList.add('on'); e.target.classList.remove('away')
+          }
+          else if (e.target.classList.contains('on')) e.target.classList.add('away')
+        })
+      }, { rootMargin: '0px 0px 120px 0px' })
+      steps.forEach(function (s) { io.observe(s) })
+    } else {
+      steps.forEach(function (s) { s.classList.add('on') })
+    }
+    btn.hidden = false
+    btn.addEventListener('click', function () {
+      var paused = !how.classList.contains('paused')
+      // Play starts every loop afresh, so a scene on screen joins at the
+      // finished frame it is standing in, and one off screen waits at its
+      // first frame until it is back near the screen.
+      if (!paused) steps.forEach(function (s) {
+        if (!s.classList.contains('on')) return
+        var r = s.getBoundingClientRect()
+        s.classList.toggle('late', r.top < vh() && r.bottom > 0)
+      })
+      how.classList.toggle('paused', paused)
+      btn.setAttribute('aria-pressed', paused ? 'true' : 'false')
     })
   })();
 </script>

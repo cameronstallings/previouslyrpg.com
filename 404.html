@@ -122,6 +122,10 @@
   </footer>
 </div>
 <script>
+  // iOS Safari draws :active (the plates' press) only on a page that listens
+  // for touches. This listener does nothing else.
+  document.addEventListener('touchstart', function () {}, { passive: true });
+
   (function () {
     var invite = document.getElementById('invite')
     var recap = document.getElementById('recap')
@@ -278,7 +282,7 @@
         document.getElementById('rcta').hidden = false
       }).catch(gone)
     }
-  })()
+  })();
 </script>
 </body>
 </html>

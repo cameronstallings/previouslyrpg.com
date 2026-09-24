@@ -166,3 +166,12 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; 
 .toc { columns: 2; column-gap: 24px; font-size: 17px; }
 .toc a { text-decoration: none; }
 @media (max-width: 560px) { h1 { font-size: 36px; } body { font-size: 18px; } .toc { columns: 1; } .hero-seal { width: 120px; height: 120px; } }
+
+/* Press: the seal and the plates give a little under the thumb, as wax does,
+   and come back slowly. Nothing moves for readers who asked for less motion;
+   they keep the darker wax and the brighter rim above. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-seal, .plate { transition: transform 220ms cubic-bezier(.2, .7, .2, 1); }
+  .hero-seal:active { transform: scale(0.96); transition-duration: 90ms; }
+  .plate:active { transform: scale(0.97); transition-duration: 90ms; }
+}
